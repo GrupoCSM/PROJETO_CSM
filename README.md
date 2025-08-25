@@ -7,7 +7,7 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 ## 👥 Equipe
 
 ### Ralisson da Conceição Helena
-- **Formação:** Estudante de ADS
+- **Formação:** Estudante de Análise e Desenvolvimento de Sistemas
 - **Interesses:**  
   - Desenvolvimento Web  
   - Design de Interfaces  
@@ -29,7 +29,7 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 ---
 
 ### Eliaquim Generino Falcão de Morais Pereira da Silva 
-- **Formação:** Estudante de <Curso>  
+- **Formação:** Estudante de Análise e Desenvolvimento de Sistemas 
 - **Interesses:**  
   - Programação
   - Grupos de comunidades
