@@ -4,6 +4,36 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 
 ---
 
+## Estrutura do Projeto
+```
+.
+├── index.html
+├── style.css
+├── img/
+│   └── (Imagens do projeto: logo, banner, etc.)
+├── setores/
+│   ├── pais-alunos.html
+│   ├── apoio-pedagogico.html
+│   ├── supervisao.html
+│   ├── rh.html
+│   ├── contato.html
+│   ├── login.html
+│   └── projetos.html
+├── README.md
+└── Documentação do Projeto English4You.docx
+
+```
+---
+
+## 🚀 Tecnologias do Projeto
+- HTML  
+- CSS  
+- JavaScript  
+- Git/GitHub  
+
+---
+
+
 ## 👥 Equipe
 
 ### Ralisson da Conceição Helena
@@ -47,14 +77,6 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 - **Linguagens/Ferramentas:** JavaScript, CSS, HTML
 - **Atualmente aprendendo:** Aprofundando em conhecimentos de HTML E CSS
 - **Contato:** E-mail <danielarouca58@gmail.com>
-
----
-
-## 🚀 Tecnologias do Projeto
-- HTML  
-- CSS  
-- JavaScript  
-- Git/GitHub  
 
 ---
 
