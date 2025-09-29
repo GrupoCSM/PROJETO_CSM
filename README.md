@@ -23,11 +23,12 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 ---
 
 ## 🚀 Tecnologias do Projeto
-HTML
-CSS
-JavaScript
-PHP
-Git/GitHub
+ - HTML
+ - CSS
+ - JavaScript
+ - PHP
+ - Git/GitHub
+
 ---
 
 
