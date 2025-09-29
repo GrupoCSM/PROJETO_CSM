@@ -10,27 +10,24 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 ├── index.html
 ├── style.css
 ├── img/
-│   └── (Imagens do projeto: logo, banner, etc.)
+│   └── (Imagens do projeto)
 ├── setores/
-│   ├── pais-alunos.html
-│   ├── apoio-pedagogico.html
-│   ├── supervisao.html
-│   ├── rh.html
-│   ├── contato.html
-│   ├── login.html
-│   └── projetos.html
-├── README.md
+│   └── (Páginas institucionais do site (Pais e Alunos, Apoio Pedagógico, Supervisão, RH, Projetos))
+├── auth/
+│   └── (Páginas relacionadas a autenticação (login, reset, welcome))
+├── crud/
+├── db.php
 └── Documentação do Projeto English4You.docx
 
 ```
 ---
 
 ## 🚀 Tecnologias do Projeto
-- HTML  
-- CSS  
-- JavaScript  
-- Git/GitHub  
-
+HTML
+CSS
+JavaScript
+PHP
+Git/GitHub
 ---
 
 
