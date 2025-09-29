@@ -7,17 +7,18 @@ O objetivo do projeto é Desenvolver um site institucional educacional de inglê
 ## Estrutura do Projeto
 ```
 .
-├── index.html
-├── style.css
 ├── img/
 │   └── (Imagens do projeto)
-├── setores/
-│   └── (Páginas institucionais do site (Pais e Alunos, Apoio Pedagógico, Supervisão, RH, Projetos))
 ├── auth/
 │   └── (Páginas relacionadas a autenticação (login, reset, welcome))
 ├── crud/
+├── setores/
+│   └── (Páginas institucionais do site (Pais e Alunos, Apoio Pedagógico, Supervisão, RH, Projetos))
+├── Documentação do Projeto English4You.docx
+├── README.md
 ├── db.php
-└── Documentação do Projeto English4You.docx
+├── index.html
+└── style.css
 
 ```
 ---
