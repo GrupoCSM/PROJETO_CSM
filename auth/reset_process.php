@@ -4,6 +4,7 @@ include("../db.php");
 $mensagem = "";
 $tipo = ""; // success ou error
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $nome  = $_POST['full_name'];
