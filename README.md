@@ -1,6 +1,6 @@
 # Projeto English4You
 
-O objetivo do projeto é Desenvolver um site institucional educacional de inglês com foco em captação de alunos.  
+Nosso objetivo é Transformar o aprendizado de inglês em algo simples, envolvente e prazeroso, desenvolvendo um site moderno e acessível que simplifique a jornada do aluno com informações claras e apoio especializado.  
 
 ---
 
