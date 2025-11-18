@@ -1,20 +1,70 @@
 <?php
+session_start();
 include("../db.php");
-$id = $_GET['id'];
-$result = $conn->query("SELECT * FROM Users WHERE id=$id");
+
+if (!isset($_SESSION['user_role'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+if ($_SESSION['user_role'] !== 'Administrador') {
+    echo "<script>
+        alert('Acesso negado! Somente administradores podem editar usuários.');
+        window.location.href = 'index_users.php';
+    </script>";
+    exit();
+}
+
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo "<script>
+        alert('ID inválido.');
+        window.location.href = 'index_users.php';
+    </script>";
+    exit();
+}
+
+$id = intval($_GET['id']);
+
+
+$stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (!$user) {
+    echo "<script>
+        alert('Usuário não encontrado.');
+        window.location.href = 'index_users.php';
+    </script>";
+    exit();
+}
+
+
+$profiles = $conn->query("SELECT id, role_name FROM Profiles");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
     $nome = $_POST['full_name'];
     $senha = $_POST['password'];
+    $profile_id = intval($_POST['profile_id']);
 
-    $sql = "UPDATE Users SET email='$email', full_name='$nome', password='$senha' WHERE id=$id";
-    if ($conn->query($sql) === TRUE) {
-        header("Location: index_users.php");
+    $stmt = $conn->prepare("
+        UPDATE Users 
+        SET email = ?, full_name = ?, password = ?, profile_id = ?
+        WHERE id = ?
+    ");
+    $stmt->bind_param("sssii", $email, $nome, $senha, $profile_id, $id);
+
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Usuário atualizado com sucesso!');
+            window.location.href = 'index_users.php';
+        </script>";
         exit();
     } else {
-        echo "Erro: " . $conn->error;
+        echo "Erro ao atualizar: " . $conn->error;
     }
 }
 ?>
@@ -45,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       text-align: center;
       color: #2c3e50;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -78,9 +128,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="form-container">
     <h2>Editar Usuário</h2>
     <form method="post">
-      <input type="email" name="email" value="<?= $user['email'] ?>" required>
-      <input type="text" name="full_name" value="<?= $user['full_name'] ?>" required>
-      <input type="password" name="password" value="<?= $user['password'] ?>" required>
+      <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+      <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
+      <input type="password" name="password" value="<?= htmlspecialchars($user['password']) ?>" required>
+
+     
+      <select name="profile_id" required>
+        <option value="">Selecione um perfil</option>
+        <?php while ($p = $profiles->fetch_assoc()): ?>
+          <option value="<?= $p['id'] ?>" <?= ($p['id'] == $user['profile_id']) ? 'selected' : '' ?>>
+            <?= htmlspecialchars($p['role_name']) ?>
+          </option>
+        <?php endwhile; ?>
+      </select>
+
       <button type="submit">Atualizar</button>
     </form>
     <a href="index_users.php">← Voltar</a>
