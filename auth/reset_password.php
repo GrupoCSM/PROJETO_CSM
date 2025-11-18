@@ -95,6 +95,7 @@
         }
     </style>
 </head>
+    
 <body>
     <header>
         <div class="header-container">
@@ -129,3 +130,4 @@
     </footer>
 </body>
 </html>
+
