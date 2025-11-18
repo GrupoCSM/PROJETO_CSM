@@ -1,6 +1,25 @@
 <?php
+session_start();
 include("../db.php");
-$sql = "SELECT id, full_name, email FROM Users";
+
+if (!isset($_SESSION['user_role'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+
+if ($_SESSION['user_role'] === 'Aluno') {
+    echo "<script>
+        alert('Acesso negado! Somente professores e administradores podem visualizar esta página.');
+        window.location.href = '../index.html';
+    </script>";
+    exit();
+}
+
+
+$sql = "SELECT Users.id, Users.full_name, Users.email, Profiles.role_name 
+        FROM Users 
+        LEFT JOIN Profiles ON Users.profile_id = Profiles.id";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -15,21 +34,19 @@ $result = $conn->query($sql);
       margin: 0;
       display: flex;
       flex-direction: column;
+      font-family: Arial, sans-serif;
     }
 
-    main {
-      flex: 1; 
-    }
+    main { flex: 1; }
 
     footer {
       background: #004080;
       color: #fff;
       text-align: center;
       padding: 10px;
-      margin-top: auto; 
+      margin-top: auto;
     }
 
-    /* Estilo da tabela */
     table {
       border-collapse: collapse;
       width: 90%;
@@ -41,29 +58,22 @@ $result = $conn->query($sql);
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    table th, table td {
+    th, td {
       padding: 12px 15px;
       text-align: center;
     }
 
-    table th {
+    th {
       background: #004080;
       color: #fff;
-      font-weight: bold;
       text-transform: uppercase;
       font-size: 14px;
     }
 
-    table tr:nth-child(even) {
-      background: #f2f2f2;
-    }
+    tr:nth-child(even) { background: #f2f2f2; }
+    tr:hover { background: #eaf2ff; }
 
-    table tr:hover {
-      background: #eaf2ff;
-    }
-
-    /* Links de ação */
-    table a {
+    a {
       text-decoration: none;
       padding: 6px 12px;
       margin: 0 2px;
@@ -72,34 +82,15 @@ $result = $conn->query($sql);
       transition: 0.3s;
     }
 
-    table a[href*="view"] {
-      background: #3498db;
-      color: #fff;
-    }
+    a.view { background: #3498db; color: #fff; }
+    a.view:hover { background: #217dbb; }
 
-    table a[href*="view"]:hover {
-      background: #217dbb;
-    }
+    a.edit { background: #f39c12; color: #fff; }
+    a.edit:hover { background: #d68910; }
 
-    table a[href*="edit"] {
-      background: #f39c12;
-      color: #fff;
-    }
+    a.delete { background: #e74c3c; color: #fff; }
+    a.delete:hover { background: #c0392b; }
 
-    table a[href*="edit"]:hover {
-      background: #d68910;
-    }
-
-    table a[href*="delete"] {
-      background: #e74c3c;
-      color: #fff;
-    }
-
-    table a[href*="delete"]:hover {
-      background: #c0392b;
-    }
-
-    /* Botão principal */
     .btn {
       display: inline-block;
       padding: 10px 18px;
@@ -112,58 +103,77 @@ $result = $conn->query($sql);
       transition: 0.3s;
     }
 
-    .btn:hover {
-      background: #1e8449;
-    }
+    .btn:hover { background: #1e8449; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container header-container">
-      <div class="branding">
-        <img src="../img/Letreiro.png" alt="Logo English4You" class="logo-nome">
-      </div>
-      <nav>
-        <ul class="menu">
-          <li><a href="../index.html">Início</a></li>
-          <li><a href="pais-alunos.html">Pais e Alunos</a></li>
-          <li><a href="apoio-pedagogico.html">Apoio Pedagógico</a></li>
-          <li><a href="supervisao.html">Supervisão</a></li>
-          <li><a href="rh.html">RH</a></li>
-          <li><a href="projetos.html">Projetos</a></li>
-        </ul>
-      </nav>
+  <header style="background-color:#004080; color:white; padding:15px 0;">
+  <div style="max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
+    
+    <div class="branding" style="display:flex; align-items:center; gap:10px;">
+      <img src="../img/Letreiro.png" alt="Logo English4You" style="height:45px;">
     </div>
-  </header>
+
+    <nav>
+      <ul class="menu" style="list-style:none; margin:0; padding:0; display:flex; gap:20px; align-items:center;">
+        <li><a href="../index.html" style="color:white; text-decoration:none; font-weight:bold;">Início</a></li>
+        <li><a href="../setores/pais-alunos.html" style="color:white; text-decoration:none; font-weight:bold;">Pais e Alunos</a></li>
+        <li><a href="../setores/apoio-pedagogico.html" style="color:white; text-decoration:none; font-weight:bold;">Apoio Pedagógico</a></li>
+        <li><a href="../setores/supervisao.html" style="color:white; text-decoration:none; font-weight:bold;">Supervisão</a></li>
+        <li><a href="../setores/rh.html" style="color:white; text-decoration:none; font-weight:bold;">RH</a></li>
+        <li><a href="../setores/projetos.html" style="color:white; text-decoration:none; font-weight:bold;">Projetos</a></li>
+      </ul>
+    </nav>
+
+    
+    <div style="text-align:right;">
+      <span style="font-weight:bold;"> <?= htmlspecialchars($_SESSION['user_name']) ?></span><br>
+      <small><?= htmlspecialchars($_SESSION['user_role']) ?></small>
+      <br>
+      <a href="../auth/logout.php" style="color:#ffcccb; text-decoration:none; font-size:13px;">Sair</a>
+    </div>
+  </div>
+</header>
+
 
   <main>
-  <h2 style="text-align:center;">Lista de Usuários</h2>
+    <h2 style="text-align:center;">Lista de Usuários</h2>
   
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Email</th>
-      <th>Ações</th>
-    </tr>
-    <?php while($row = $result->fetch_assoc()): ?>
-    <tr>
-      <td><?= $row['id'] ?></td>
-      <td><?= $row['full_name'] ?></td>
-      <td><?= $row['email'] ?></td>
-      <td>
-        <a href="view_user.php?id=<?= $row['id'] ?>">Ver</a>
-        <a href="edit_user.php?id=<?= $row['id'] ?>">Editar</a>
-        <a href="delete_user.php?id=<?= $row['id'] ?>" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
-      </td>
-    </tr>
-    <?php endwhile; ?>
-  </table>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Perfil</th>
+        <th>Ações</th>
+      </tr>
 
-  <div style="text-align:center; margin: 20px 0;">
-    <a href="create_user.php" class="btn">+ Criar Novo Usuário</a>
-  </div>
- </main>
+      <?php while ($row = $result->fetch_assoc()): ?>
+        <tr>
+          <td><?= $row['id'] ?></td>
+          <td><?= htmlspecialchars($row['full_name']) ?></td>
+          <td><?= htmlspecialchars($row['email']) ?></td>
+          <td><?= htmlspecialchars($row['role_name'] ?? 'Não definido') ?></td>
+          <td>
+          
+            <a href="view_user.php?id=<?= $row['id'] ?>" class="view">Ver</a>
+
+            
+            <?php if ($_SESSION['user_role'] === 'Administrador'): ?>
+              <a href="edit_user.php?id=<?= $row['id'] ?>" class="edit">Editar</a>
+              <a href="delete_user.php?id=<?= $row['id'] ?>" class="delete" onclick="return confirm('Deseja realmente excluir este usuário?')">Excluir</a>
+            <?php endif; ?>
+          </td>
+        </tr>
+      <?php endwhile; ?>
+    </table>
+
+    <?php if ($_SESSION['user_role'] === 'Administrador'): ?>
+      <div style="text-align:center; margin: 20px 0;">
+        <a href="create_user.php" class="btn">+ Criar Novo Usuário</a>
+      </div>
+    <?php endif; ?>
+  </main>
 
   <footer>
     <p>© 2025 English4You</p>
