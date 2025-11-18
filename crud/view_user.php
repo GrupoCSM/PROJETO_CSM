@@ -1,7 +1,14 @@
 <?php
 include("../db.php");
+
 $id = $_GET['id'];
-$result = $conn->query("SELECT * FROM Users WHERE id=$id");
+
+$sql = "SELECT Users.*, Profiles.role_name 
+        FROM Users 
+        LEFT JOIN Profiles ON Users.profile_id = Profiles.id 
+        WHERE Users.id = $id";
+
+$result = $conn->query($sql);
 $user = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
@@ -57,6 +64,7 @@ $user = $result->fetch_assoc();
     <p><strong>Email:</strong> <?= $user['email'] ?></p>
     <p><strong>Nome:</strong> <?= $user['full_name'] ?></p>
     <p><strong>Senha:</strong> <?= $user['password'] ?></p>
+    <p><strong>Perfil:</strong> <?= $user['role_name'] ? $user['role_name'] : 'Não atribuído' ?></p>
     <a href="index_users.php">← Voltar</a>
   </div>
 </body>
