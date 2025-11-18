@@ -1,17 +1,42 @@
 <?php
+session_start();
 include("../db.php");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $nome = $_POST['full_name'];
-    $senha = $_POST['password'];
+if (!isset($_SESSION['user_role'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
-    $sql = "INSERT INTO Users (email, full_name, password) VALUES ('$email','$nome','$senha')";
-    if ($conn->query($sql) === TRUE) {
-        header("Location: index_users.php");
+if ($_SESSION['user_role'] !== 'Administrador') {
+    echo "<script>
+        alert('Acesso negado! Somente administradores podem criar usuários.');
+        window.location.href = 'index_users.php';
+    </script>";
+    exit();
+}
+
+$profiles = $conn->query("SELECT id, role_name FROM Profiles");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim($_POST['email']);
+    $nome = trim($_POST['full_name']);
+    $senha = trim($_POST['password']);
+    $profile_id = intval($_POST['profile_id']);
+
+    $stmt = $conn->prepare("
+        INSERT INTO Users (email, full_name, password, profile_id)
+        VALUES (?, ?, ?, ?)
+    ");
+    $stmt->bind_param("sssi", $email, $nome, $senha, $profile_id);
+
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Usuário criado com sucesso!');
+            window.location.href = 'index_users.php';
+        </script>";
         exit();
     } else {
-        echo "Erro: " . $conn->error;
+        echo "Erro ao criar usuário: " . $conn->error;
     }
 }
 ?>
@@ -42,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       text-align: center;
       color: #2c3e50;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -78,6 +103,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="email" name="email" placeholder="Email" required>
       <input type="text" name="full_name" placeholder="Nome completo" required>
       <input type="password" name="password" placeholder="Senha" required>
+
+      <select name="profile_id" required>
+        <option value="">Selecione um perfil</option>
+        <?php while ($p = $profiles->fetch_assoc()): ?>
+          <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['role_name']) ?></option>
+        <?php endwhile; ?>
+      </select>
+
       <button type="submit">Salvar</button>
     </form>
     <a href="index_users.php">← Voltar</a>
