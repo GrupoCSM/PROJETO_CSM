@@ -23,7 +23,7 @@ Nosso objetivo é Transformar o aprendizado de inglês em algo simples, envolven
 ```
 ---
 
-## 🚀 Tecnologias do Projeto
+## Tecnologias do Projeto
  - HTML
  - CSS
  - JavaScript
@@ -33,7 +33,7 @@ Nosso objetivo é Transformar o aprendizado de inglês em algo simples, envolven
 ---
 
 
-## 👥 Equipe
+## Equipe
 
 ### Ralisson da Conceição Helena
 - **Formação:** Estudante de Análise e Desenvolvimento de Sistemas
